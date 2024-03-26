@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "ProductDetail";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0">
+                <a href="/trang-chu">Trang chủ</a><span class="mx-2 mb-0">/</span>
+                <a href="/@ViewBag.meta">Tin tức</a><span class="mx-2 mb-0">/</span>
+                <strong class="text-black">@Model.tittle</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="container">
+        <div class="row">
+            <section class="col-lg-8">
+                <h1 class="text-black p-5">@Model.tittle</h1>
+                <div class="text-black">
+                    @Html.Raw(Model.content)
+                </div>
+            </section>
+
+            <section class="col-lg-4">
+                @foreach (var hotnew in ViewBag.HotNews)
+                {
+                    <div class="col-md-12">
+                        <div class="p-3 p-lg-5 border">
+                            <h3><a href="/@ViewBag.meta/@hotnew.meta">@hotnew.tittle</a></h3>
+                            <p>@hotnew.summary</p>
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <a href="/@ViewBag.meta">
+                        <button class="btn btn-primary btn-lg btn-block">Tin tức khác</button>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

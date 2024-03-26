@@ -1,0 +1,11 @@
+﻿@model IEnumerable<Pharmacy.Models.Office>
+
+@foreach (var office in Model)
+{
+    <div class="col-lg-4">
+        <div class="p-4 bg-white mb-3 rounded">
+            <span class="d-block text-black h6 text-uppercase">@office.location</span>
+            <p class="mb-0"><a href="@office.link">@office.address</a></p>
+        </div>
+    </div>
+}

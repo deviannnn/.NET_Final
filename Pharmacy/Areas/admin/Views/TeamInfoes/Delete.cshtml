@@ -1,0 +1,124 @@
+﻿@model Pharmacy.Models.TeamInfo
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Xoá chuyên viên</h1>
+                <h4 class="mt-2 text-dark">Bạn muốn xoá chuyên viên này?</h4>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/admin">Trang Chủ</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "TeamInfoes")">Chuyên viên Pharmacy</a></li>
+                    <li class="breadcrumb-item active">Xoá chuyên viên</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.container-fluid -->
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <!-- Left content -->
+        <div class="col-md-8">
+            <div class="card card-danger" id="main-card">
+                <div class="card-header">
+                    <h3 class="card-title">Thông tin chuyên viên</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <div class="form-group">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-4">
+                                <label>Tên chuyên viên:&nbsp;&nbsp;</label>
+                                @Html.DisplayFor(model => model.name)
+                            </div>
+                            <div>
+                                <label>Chức vụ:&nbsp;&nbsp;</label>
+                                @Html.DisplayFor(model => model.role)
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 24px">
+                            <label class="mb-0">Mô tả chuyên môn:&nbsp;&nbsp;</label>
+                            @Html.DisplayFor(model => model.description)
+                        </div>
+
+                        <div class="form-group">
+                            <label>Link:&nbsp;&nbsp;</label>
+                            @Html.DisplayFor(model => model.link)
+                        </div>
+
+                        <div class="row form-group mb-0">
+                            <div class="col-4">
+                                <label for="order" style="align-self: end">Vị trí: </label>
+                                @Html.DisplayFor(model => model.order)
+                            </div>
+                            <div class="col-4">
+                                <label>Hiển thị:</label>
+                                @(Model.hide.GetValueOrDefault(false) ? "Đang hiển thị" : "Đã ẩn")
+                            </div>
+                            <div class="col-4">
+                                <label>Ngày cập nhật:</label>
+                                @(Model.datebegin.HasValue ? Model.datebegin.Value.ToString("dd/MM/yyyy") : "")
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+        <!-- Right content -->
+        <div class="col-md-4">
+            <div class="card card-cyan" id="sub-card">
+                <div class="card-header">
+                    <h3 class="card-title">Ảnh đại diện</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <img id="img-preview" src="~/wwwroot/upload/img/teaminfo/@Model.img" width="100%" />
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+    <div class="content-header">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Xoá" class="btn btn-danger" />
+                <a href="@Url.Action("Index", "TeamInfoes")">
+                    <button type="button" class="btn btn-outline-secondary">Quay về</button>
+                </a>
+            </div>
+        }
+
+    </div>
+
+</section>
+<!-- /.content -->
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var mainHeight = $('#main-card').height();
+            var subHeight = $('#sub-card').height();
+            var imgHeight = $('#img-preview').height();
+            $('#img-preview').height(imgHeight - subHeight + mainHeight);
+        });
+    </script>
+}

@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Pharmacy.Models.ContactInfo>
+
+<div class="col-md-6 col-lg-3">
+    <div class="block-5 mb-5">
+        <h3 class="footer-heading mb-4">Thông tin liên hệ</h3>
+        <ul class="list-unstyled">
+            @foreach (var contactinfo in Model)
+            {
+                <li class="@contactinfo.type">@contactinfo.content</li>
+            }
+        </ul>
+    </div>
+</div>

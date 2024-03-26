@@ -1,0 +1,40 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Pharma &mdash; Project</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,700|Crimson+Text:400,400i" rel="stylesheet">
+    <link rel="stylesheet" href="~/wwwroot/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/wwwroot/css/style.css">
+</head>
+
+<body>
+    <div class="site-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2 class="display-3 @((ViewBag.Success) ? "text-success" : "text-danger")">@ViewBag.Message</h2>
+                    <p class="lead mb-5"></p>
+                    @if (ViewBag.Success)
+                    {
+                        <p><a href="/dang-nhap" class="btn btn-md height-auto px-4 py-3 btn-primary">Đăng nhập ngay</a></p>
+                    }
+                    else
+                    {
+                        <p><a href="/dang-ky" class="btn btn-md height-auto px-4 py-3 btn-primary">Thử lại</a></p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

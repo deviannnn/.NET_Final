@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Pharmacy.Models.Order>
+
+@{
+    ViewBag.Title = "OrderHistory";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0">
+                <a href="/trang-chu">Trang chủ</a> <span class="mx-2 mb-0">/</span>
+                <strong class="text-black">Lịch sử đặt hàng</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="accordion" id="accordionExample">
+
+                    @foreach (var order in Model)
+                    {
+                        <div class="card">
+                            <div class="card-header d-flex" style="justify-content: space-between" id="heading-@order.id">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-@order.id" aria-expanded="true" aria-controls="collapse-@order.id">
+                                        Order #<span>@order.id</span> - <span>@order.datecreate</span>
+                                    </button>
+                                </h2>
+                                <div class="text-black font-weight-bold" style="align-self: center">
+                                    <strong>
+                                        @switch (order.status)
+                                        {
+                                            case 0:
+                                                <span class="text-warning">Đang chờ xác nhận từ cửa hàng</span>
+                                                break;
+                                            case -1:
+                                                <span class="text-danger">Đơn hàng bị huỷ</span>
+                                                break;
+                                            case 1:
+                                                <span class="text-cyan">Đơn hàng đang được vận chuyển</span>
+                                                break;
+                                            case 2:
+                                                <span class="text-success">Đơn hàng đã được giao thành công</span>
+                                                break;
+                                        }
+                                    </strong>
+                                </div>
+                            </div>
+                            <div id="collapse-@order.id" class="collapse" aria-labelledby="heading-@order.id" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-black font-weight-bold">Sản phẩm</th>
+                                                <th class="text-black font-weight-bold">Số lượng</th>
+                                                <th class="text-black font-weight-bold">Đơn giá</th>
+                                                <th class="text-black font-weight-bold">Tổng cộng</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var orderDetail in order.OrdersDetails)
+                                            {
+                                                <tr>
+                                                    <td>@orderDetail.Product.name</td>
+                                                    <td>@orderDetail.quantity</td>
+                                                    <td>@string.Format("{0:#,##0} VND", orderDetail.price)</td>
+                                                    <td>@string.Format("{0:#,##0} VND", orderDetail.amount)</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tr>
+                                            <td class="text-black font-weight-bold"><strong>Tổng đơn hàng</strong></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-black font-weight-bold"><strong>@(order.total_amount.ToString("0,0")) VND</strong></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><span class="font-weight-bold">Thông tin giao hàng</span></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                <span class="text-black font-weight-bold font-italic">Người nhận: </span>&ensp;
+                                                <span>@order.name</span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="text-black font-weight-bold font-italic">Số điện thoại: </span>&ensp;
+                                                <span>@order.phone</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="text-black font-weight-bold font-italic">Địa chỉ: </span>&ensp;
+                                                <span>@order.address</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-black font-weight-bold font-italic">Phường / Xã: </span>&ensp;
+                                                <span>@order.ward</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-black font-weight-bold font-italic">Quận / Huyện: </span>&ensp;
+                                                <span>@order.district</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-black font-weight-bold font-italic">Tỉnh / Thành phố: </span>&ensp;
+                                                <span>@order.city</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

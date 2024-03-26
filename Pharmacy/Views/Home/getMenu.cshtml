@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Pharmacy.Models.Menu>
+
+<ul class="site-menu js-clone-nav d-none d-lg-block">
+    @foreach (var menu in Model)
+    {
+        <li>
+            <a href="/@menu.meta">@menu.name</a>
+        </li>
+    }
+</ul>

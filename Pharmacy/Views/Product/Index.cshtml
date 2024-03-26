@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Pharmacy.Models.Product>
+
+@{
+    ViewBag.Title = "Product";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0">
+                <div class="col-md-12 mb-0">
+                    <a href="/trang-chu">Trang chủ</a>
+                    <span class="mx-2 mb-0">/</span>
+                    <strong class="text-black">Sản phẩm</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <h3 class="mb-3 h6 text-uppercase text-black d-block">Tìm kiếm theo danh mục</h3>
+                <button type="button" class="btn btn-secondary btn-md dropdown-toggle px-4" id="dropdownMenuReference"
+                        data-toggle="dropdown">
+                    Danh Mục
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <a class="dropdown-item" href="/@ViewBag.meta/@category.meta">@category.name</a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            @foreach (var product in Model)
+            {
+                <div class="col-sm-6 col-lg-4 text-center item mb-4">
+                    @if (product.isSale == true)
+                    {
+                        <span class="tag">Sale</span>
+                    }
+                    <a href="/@ViewBag.meta/@product.meta/@product.id"> <img src="~/wwwroot/upload/img/product/@product.img" alt="Image"></a>
+                    <h3 class="text-dark"><a href="shop-single.html">@product.name</a></h3>
+                    <p class="price">
+                        @if (product.isSale == true)
+                        {
+                            <del>@string.Format("{0:#,##0} VND", product.price)</del><span>&nbsp;&#8212;&nbsp;</span>
+                            @(string.Format("{0:#,##0} VND", product.priceSale))
+                        }
+                        else
+                        {
+                            @(string.Format("{0:#,##0} VND", product.price))
+                        }
+                    </p>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

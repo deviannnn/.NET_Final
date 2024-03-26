@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Pharmacy.Models.News>
+
+@{
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+<!-----------------------------BANNER---------------------------------->
+@{Html.RenderAction("getNewsBanner", "News"); }
+
+<!-----------------------------BODY------------------------------------>
+
+@{
+    int count = 0;
+}
+<div class="site-section bg-light custom-border-bottom">
+    <div class="container">
+        <div class="row">
+            @foreach (var news in Model)
+            {
+                <div class="col-md-6 col-lg-6 mb-5">
+                    <a href="/@ViewBag.meta/@news.meta" class="banner-1 h-100 d-flex" style="background-image: url('../../wwwroot/upload/img/news/@news.img');">
+                        <div class="banner-1-inner @(count%2==1 ? "ml-auto" : "") align-self-center">
+                            <h2>@news.tittle</h2>
+                            <p>
+                                @news.summary
+                            </p>
+                        </div>
+                    </a>
+                </div>
+                count++;
+            }
+        </div>
+    </div>
+</div>

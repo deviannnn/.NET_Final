@@ -1,0 +1,140 @@
+﻿@model IEnumerable<Pharmacy.Models.CartItem>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+    int totalAmount = 0;
+}
+
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0">
+                <a href="/trang-chu">Trang chủ</a> <span class="mx-2 mb-0">/</span>
+                <strong class="text-black">Thanh toán - Đặt hàng</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-5 mb-md-0">
+                <h2 class="h3 mb-3 text-black">Thông tin giao hàng</h2>
+                <div class="p-3 p-lg-5 border">
+                    <form id="orderForm" action="@Url.Action("Create", "Orders")" method="post">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="name" class="text-black">Tên người nhận <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" maxlength="30">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="address" class="text-black">Địa chỉ <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="address" name="address" placeholder="Số nhà, tên đường." maxlength="40">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="ward" class="text-black">Phường / Xã <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ward" name="ward" maxlength="20">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="district" class="text-black">Quận / Huyện <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="district" name="district" maxlength="20">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="city" class="text-black">Tỉnh / Thành Phố <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="city" name="city" maxlength="20">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="text-black">Số điện thoại liên hệ <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="phone" name="phone" maxlength="11">
+                            </div>
+                        </div>
+                    </form>
+
+                    @if (TempData["OrderFail"] != null)
+                    {
+                        <div class="alert-danger text-center" style="padding: 10px; border-radius: 5px;">
+                            <span>@TempData["OrderFail"]</span>
+                        </div>
+                    }
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <h2 class="h3 mb-3 text-black">Đơn hàng của bạn</h2>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="p-3 p-lg-5 border">
+
+                            <label for="c_code" class="text-black mb-3">Nhập mã phiếu giảm giá của bạn nếu bạn có</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="c_code" placeholder="Mã giảm giá" aria-label="Coupon Code"
+                                       aria-describedby="button-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary btn-sm px-4" type="button" id="button-addon2">Áp dụng</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-md-12">
+                        <div class="p-3 p-lg-5 border">
+                            <table class="table site-block-order-table mb-5">
+                                <thead>
+                                <th>Sản phẩm</th>
+                                <th>Tổng cộng</th>
+                                </thead>
+                                <tbody>
+                                    @foreach (var cart in Model)
+                                    {
+                                        <tr>
+                                            <td>@cart.product.name <strong class="mx-2">x</strong> @cart.quantity</td>
+                                            <td>@string.Format("{0:#,##0} VND", cart.amount)</td>
+                                        </tr>
+                                        totalAmount += cart.amount;
+                                    }
+
+                                    <tr>
+                                        <td class="text-black font-weight-bold"><strong>Số tiền phải thanh toán</strong></td>
+                                        <td class="text-black font-weight-bold"><strong>@string.Format("{0:#,##0} VND", totalAmount)</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-lg btn-block" onclick="createOrder();">
+                                    Đặt hàng
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- </form> -->
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function createOrder() {
+            document.getElementById('orderForm').submit();
+        }
+    </script>
+}

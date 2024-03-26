@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "ProductDetail";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0">
+                <a href="/trang-chu">Trang chủ</a><span class="mx-2 mb-0">/</span>
+                <a href="/san-pham">Sản phẩm</a><span class="mx-2 mb-0">/</span>
+                <a href="/san-pham/@Model.Category.meta">@Model.Category.name</a><span class="mx-2 mb-0">/</span>
+                <strong class="text-black">@Model.name</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 mr-auto">
+                @if (@Model.isSale == true)
+                {
+                    <span class="tag">Sale</span>
+                }
+                <div class="border text-center">
+                    <img src="~/wwwroot/upload/img/product/@Model.img" alt="Image" class="img-fluid p-5">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2 class="text-black">@Model.name</h2>
+                <p>
+                    @Model.description
+                </p>
+                <p>
+                    @if (@Model.isSale == true)
+                    {
+                        <del>@string.Format("{0:#,##0} VND", Model.price)</del>
+                        <span>&nbsp;&#8212;&nbsp;</span>
+                        <strong class="text-primary h4">@string.Format("{0:#,##0} VND", Model.priceSale)</strong>
+                    }
+                    else
+                    {
+                        <strong class="text-primary h4">@string.Format("{0:#,##0} VND", Model.price)</strong>
+                    }
+                </p>
+                <div class="mb-5">
+                    <form id="addToCartForm" action="@Url.Action("AddToCart", "Cart")" method="post">
+                        <div class="input-group mb-3" style="max-width: 220px;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="productId" value="@Model.id" />
+
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-primary js-btn-minus" type="button" onclick="decreaseQuantity();">&minus;</button>
+                            </div>
+                            <input type="text" class="form-control text-center" name="quantity" id="quantityInput" value="1"
+                                   readonly style="background: white">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary js-btn-plus" type="button" onclick="increaseQuantity();">&plus;</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <p>
+                    <a class="buy-now btn btn-sm height-auto px-4 py-3 btn-primary text-dark" onclick="addToCart();" style="cursor: pointer">
+                        Thêm vào giỏ hàng
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function decreaseQuantity() {
+            var quantityInput = document.getElementById('quantityInput');
+            var currentQuantity = parseInt(quantityInput.value);
+            if (currentQuantity > 1) {
+                quantityInput.value = currentQuantity - 1;
+            }
+        }
+
+        function increaseQuantity() {
+            var quantityInput = document.getElementById('quantityInput');
+            var currentQuantity = parseInt(quantityInput.value);
+            quantityInput.value = currentQuantity + 1;
+        }
+
+        function addToCart() {
+            document.getElementById('addToCartForm').submit();
+        }
+    </script>
+}

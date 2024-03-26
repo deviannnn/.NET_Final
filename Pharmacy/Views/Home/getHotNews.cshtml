@@ -1,0 +1,22 @@
+﻿@model  IEnumerable<Pharmacy.Models.News>
+
+@{
+    int count = 0;
+}
+
+@foreach (var news in Model)
+{
+    <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
+        <div class="banner-wrap h-100" style="@(count % 3 == 0 ? "background-color: #007bff;" : (count % 3 == 2 ? "background-color: #ffc107;" : ""))">
+            <a href="/@ViewBag.meta/@news.meta" class="h-100">
+                <h5>@news.tittle</h5>
+                <br />
+                <p>
+                    <strong>@news.summary</strong>
+                </p>
+            </a>
+        </div>
+    </div>
+
+    count++;
+}

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Pharmacy.Models.CompanyInfo>
+
+@{
+    int count = 0;
+}
+
+@foreach (var companyinfo in Model)
+{
+    <div class="site-section bg-light custom-border-bottom">
+        <div class="container">
+            <div class="row mb-5">
+                @if (count % 2 == 0)
+                {
+                    <div class="col-md-6">
+                        <div class="block-16">
+                            <figure>
+                                <img src="~/wwwroot/upload/img/companyinfo/@companyinfo.img" alt="Image placeholder" class="img-fluid rounded" style="width: 540px; height: 354px">
+                                <a href="@companyinfo.link" class="play-button popup-vimeo">
+                                    <span class="icon-play"></span>
+                                </a>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1"></div>
+
+                    <div class="col-md-5">
+                        <div class="site-section-heading pt-3 mb-4">
+                            <h2 class="text-black">@companyinfo.tittle</h2>
+                        </div>
+                        <p>@companyinfo.content</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-5 mr-auto">
+                        <div class="site-section-heading pt-3 mb-4">
+                            <h2 class="text-black">@companyinfo.tittle</h2>
+                        </div>
+                        <p>@companyinfo.content</p>
+                    </div>
+                    <div class="col-md-6 order-md-2">
+                        <div class="block-16">
+                            <figure>
+                                <img src="~/wwwroot/upload/img/companyinfo/@companyinfo.img" alt="Image placeholder" class="img-fluid rounded" style="width: 540px; height: 354px">
+                                <a href="@companyinfo.link" class="play-button popup-vimeo">
+                                    <span class="icon-play"></span>
+                                </a>
+                            </figure>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    count++;
+}

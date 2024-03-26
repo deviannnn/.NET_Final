@@ -1,0 +1,36 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+<!-----------------------------BANNER---------------------------------->
+@{Html.RenderAction("getAboutBanner", "About"); }
+
+<!-----------------------------BODY------------------------------------>
+@{Html.RenderAction("getCompanyInfo", "About"); }
+
+<div class="site-section custom-border-bottom">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-7 site-section-heading text-center pt-4">
+                <h2>Thành viên của Pharmacy</h2>
+            </div>
+        </div>
+        <div class="row">
+            @{Html.RenderAction("getTeamInfo", "About"); }
+
+        </div>
+    </div>
+</div>
+
+<div class="site-section bg-light custom-border-bottom">
+    <div class="container">
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-7 site-section-heading text-center pt-4">
+                <h2 id="chi-nhanh">Các chi nhánh của Pharmacy</h2>
+            </div>
+        </div>
+        <div class="row">
+            @{Html.RenderAction("getOffice", "About"); }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,178 @@
+﻿@{
+    ViewBag.Title = "_MyLayout";
+    var customerId = Session["CustomerId"] as int?;
+    var CartQuantity = Session["CartQuantity"] as int?;
+    int quantity = CartQuantity ?? 0;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Pharma &mdash; Project</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,700|Crimson+Text:400,400i" rel="stylesheet">
+    <link rel="stylesheet" href="~/wwwroot/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="~/wwwroot/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/wwwroot/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/wwwroot/css/jquery-ui.css">
+    <link rel="stylesheet" href="~/wwwroot/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/wwwroot/css/owl.theme.default.min.css">
+
+    <link rel="stylesheet" href="~/wwwroot/css/style.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Areas/admin/wwwroot/plugins/fontawesome-free/css/all.min.css" />
+
+    <style>
+        .item img {
+            width: 270px;
+            height: 370px;
+        }
+
+        #alertCart {
+            padding: 10px;
+            border-radius: 5px;
+            position: absolute;
+            right: 200px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="site-wrap">
+
+        <div class="site-navbar py-2">
+
+            <div class="container">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="logo">
+                        <div class="site-logo">
+                            <a href="/trang-chu" class="js-logo-clone">Pharma</a>
+                        </div>
+                    </div>
+
+                    <div class="main-nav d-none d-lg-block">
+                        <nav class="site-navigation text-right text-md-center" role="navigation">
+                            @{Html.RenderAction("getMenu", "Home"); }
+                        </nav>
+                    </div>
+
+                    <div class="icons">
+                        @if (customerId != null)
+                        {
+                            <a class="nav-link d-inline-block" data-toggle="dropdown" href="">
+                                <i class="fas fa-user"></i>
+                                <i class="fas fa-check"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                                <a href="/lich-su-dat-hang" class="dropdown-item">
+                                    <i class="fas fa-clock mr-2"></i> Lịch sử đặt hàng
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="/doi-mat-khau" class="dropdown-item">
+                                    <i class="fas fa-lock mr-2"></i> Đổi mật khẩu
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <form id="logoutForm" action="@Url.Action("Logout", "Account")" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <a class="dropdown-item" onclick="document.getElementById('logoutForm').submit();" style="cursor: pointer">
+                                        <i class="fas fa-arrow-alt-circle-right mr-2"></i> Đăng xuất
+                                    </a>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="nav-link d-inline-block" data-toggle="dropdown" href="">
+                                <i class="fas fa-user"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                                <a href="/dang-nhap" class="dropdown-item">
+                                    <i class="fas fa-door-open mr-2"></i> Đăng nhập
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="/dang-ky" class="dropdown-item">
+                                    <i class="fas fa-key mr-2"></i> Đăng ký
+                                </a>
+                            </div>
+                        }
+
+                        <a href="/gio-hang" class="icons-btn d-inline-block bag">
+                            <span class="icon-shopping-bag"></span>
+                            <span class="number">@quantity</span>
+                        </a>
+                        
+                        <div id="alertCart" class="@((TempData["Message"] != null) ? TempData["css"] : "")">
+                            <span>@((TempData["Message"] != null) ? @TempData["Message"] : "")</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BODY -->
+
+        @RenderBody()
+
+
+        <!-----------------------------FOOTER ----------------------------->
+        <footer class="site-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+                        <div class="block-7">
+
+                            <h3 class="footer-heading mb-4">Về Pharmacy</h3>
+                            <p>
+                                Tại Pharmacy, mỗi Dược sĩ luôn hết lòng phục vụ, rèn luyện để hoàn thành xuất sắc nhiệm vụ được giao.
+                            </p>
+                            <a href="/thong-tin-nha-thuoc" style="text-decoration: underline;">Tìm hiểu thêm</a>
+                        </div>
+                    </div>
+
+                    @{Html.RenderAction("getFooterQuickLink", "Home"); }
+                    @{Html.RenderAction("getFooterContactInfo", "Home"); }
+                </div>
+
+                <div class="row pt-5 mt-5 text-center">
+                    <div class="col-md-12">
+                        <p>
+                            Copyright &copy;
+                            <script>document.write(new Date().getFullYear());</script> Nhóm CN .NET
+                            <i class="icon-heart" aria-hidden="true"></i> by
+                            <a href="#" target="_blank" class="text-primary">Lý An, MeSa, Công Chánh</a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../../wwwroot/js/jquery-3.3.1.min.js"></script>
+    <script src="../../wwwroot/js/jquery-ui.js"></script>
+    <script src="../../wwwroot/js/popper.min.js"></script>
+    <script src="../../wwwroot/js/bootstrap.min.js"></script>
+    <script src="../../wwwroot/js/owl.carousel.min.js"></script>
+    <script src="../../wwwroot/js/jquery.magnific-popup.min.js"></script>
+
+    <script src="../../wwwroot/js/main.js"></script>
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                $(".alert-success").fadeOut('slow');
+                $(".alert-danger").fadeOut('slow');
+            }, 2300);
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>
+

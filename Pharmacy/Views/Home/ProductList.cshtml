@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Pharmacy.Models.Product>
+
+@foreach (var product in Model)
+{
+    <div class="col-sm-6 col-lg-4 text-center item mb-4">
+        @if (product.isSale == true)
+        {
+            <span class="tag">Sale</span>
+        }
+        <a href="/@ViewBag.meta/@product.meta/@product.id"> <img src="~/wwwroot/upload/img/product/@product.img" alt="Image"></a>
+        <h3 class="text-dark"><a href="shop-single.html">@product.name</a></h3>
+        <p class="price">
+            @if (product.isSale == true)
+            {
+                <del>@string.Format("{0:#,##0} VND", product.price)</del><span>&nbsp;&#8212;&nbsp;</span>
+                @(string.Format("{0:#,##0} VND", product.priceSale))
+            }
+            else
+            {
+                @(string.Format("{0:#,##0} VND", product.price))
+            }
+        </p>
+    </div>
+}

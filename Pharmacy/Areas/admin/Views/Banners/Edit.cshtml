@@ -1,0 +1,160 @@
+﻿@model Pharmacy.Models.Banner
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Cập nhật banner</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/admin">Trang Chủ</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Banners")">Banner</a></li>
+                    <li class="breadcrumb-item active">Cập nhật banner</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.container-fluid -->
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    @using (Html.BeginForm("Edit", "Banners", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+        <div class="row">
+            <!-- Left content -->
+            <div class="col-md-8">
+                <div class="card card-warning" id="main-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Thông tin banner</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <div class="form-group">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="tittle">Tiêu đề</label>
+                                @Html.EditorFor(model => model.tittle, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tiêu đề tối đa 50 kí tự", @maxlength = "50" } })
+                                @Html.ValidationMessageFor(model => model.tittle, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-5">
+                                    <label for="page">Dùng cho trang</label>
+                                    @Html.DropDownListFor(model => model.page, (SelectList)ViewBag.Page, new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="content">Nội dung</label>
+                                @Html.TextAreaFor(model => model.content, new { @class = "form-control", @rows = 3, @placeholder = "Nội dung của banner", @maxlength = "500" })
+                                @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="row form-group mb-0">
+                                <div class="col-3">
+                                    <label for="order">Vị trí</label>
+                                    @Html.EditorFor(model => model.order, new { htmlAttributes = new { @class = "form-control", @min = "1", style = "width: 100px" } })
+                                    @Html.ValidationMessageFor(model => model.order, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-3" style="align-self: end">
+                                    <div>
+                                        @{
+                                            bool hide = Model.hide ?? false;
+                                        }
+                                        @Html.CheckBoxFor(model => hide, new { @class = "form-check-input" })
+                                        <label class="form-check-label" for="hide">Hiển thị</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+            <!-- Right content -->
+            <div class="col-md-4">
+                <div class="card card-cyan" id="sub-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Ảnh banner</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <img id="img-preview" src="~/wwwroot/upload/img/banner/@Model.img" width="100%" />
+                        <div class="form-group">
+                            <label for="img"></label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="img" id="img" accept=".jpg,.png,.gif,.jpeg,.bmp" onchange="previewImage();" />
+                                    <label class="custom-file-label" for="img">Chọn file</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Tải lên</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+        <div class="content-header">
+            <button type="submit" class="btn btn-warning">Lưu</button>
+            <a href="@Url.Action("Index", "Banners")">
+                <button type="button" class="btn btn-outline-secondary">Quay về</button>
+            </a>
+        </div>
+    }
+</section>
+<!-- /.content -->
+
+@section Scripts {
+    <!-- Summernote -->
+    <script src="~/Areas/admin/wwwroot/plugins/summernote/summernote-bs4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            updateHeight();
+
+            $("#img").change(function () {
+                readURL(this);
+            });
+
+            $('input, textarea').click(function () {
+                $(this).next('.text-danger').hide();
+                updateHeight();
+            });
+        });
+
+        function updateHeight() {
+            var mainHeight = $('#main-card').height();
+            var subHeight = $('#sub-card').height();
+            var imgHeight = $('#img-preview').height();
+            $('#img-preview').height(imgHeight - subHeight + mainHeight);
+        }
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#img-preview').attr('src', e.target.result);
+                    $('#img-preview').show();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

@@ -1,0 +1,184 @@
+﻿@model IEnumerable<Pharmacy.Models.CartItem>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+    int totalAmount = 0;
+    int totalSale = 0;
+}
+
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-0">
+                <a href="/trang-chu">Trang chủ</a> <span class="mx-2 mb-0">/</span>
+                <strong class="text-black">Giỏ hàng</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="site-blocks-table">
+                <form id="updateCartForm" action="@Url.Action("UpdateCart", "Cart")" method="post">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="product-thumbnail">Hình ảnh</th>
+                                <th class="product-name">Sản phẩm</th>
+                                <th class="product-price">Đơn giá</th>
+                                <th class="product-quantity">Số lượng</th>
+                                <th class="product-total">Tổng cộng</th>
+                                <th class="product-remove">Xoá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var cart in Model)
+                            {
+                                <tr>
+                                    <td class="product-thumbnail">
+                                        @if (cart.product.isSale == true)
+                                        {
+                                            <span class="bg-warning text-light" style="font-size: 20px">Sale</span>
+                                            totalSale += (int)(cart.product.price - cart.product.priceSale);
+                                        }
+                                        <img src="~/wwwroot/upload/img/product/@cart.product.img" alt="Image" class="img-fluid">
+                                    </td>
+                                    <td class="product-name">
+                                        <h2 class="h5 text-black">@cart.product.name</h2>
+                                    </td>
+                                    <td>@((bool)cart.product.isSale ? string.Format("{0:#,##0} VND", cart.product.priceSale) : string.Format("{0:#,##0} VND", cart.product.price))</td>
+                                    <td>
+                                        <div class="input-group mb-3" style="max-width: 120px;">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                                            </div>
+
+                                            <input type="text" class="form-control text-center quantity-input" name="id_quantity[@cart.product.id]" value="@cart.quantity" 
+                                                   readonly style="background: white">
+
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@string.Format("{0:#,##0} VND", cart.amount)</td>
+                                    <td>
+                                        <a style="cursor: pointer" class="btn btn-primary height-auto btn-sm btn-remove" data-product-id="@cart.product.id">X</a>
+                                    </td>
+                                </tr>
+                                totalAmount += cart.amount;
+                            }
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row mb-5">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <button class="btn btn-primary btn-md btn-block" onclick="updateCart();">Cập nhật giỏ hàng</button>
+                    </div>
+                    <div class="col-md-6">
+                       <a href="/san-pham">
+                           <button class="btn btn-outline-primary btn-md btn-block">Tiếp tục mua hàng</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 pl-5">
+                <div class="row justify-content-end">
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-12 text-right border-bottom mb-5">
+                                <h3 class="text-black h4 text-uppercase">Tổng kết giỏ hàng</h3>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <span class="text-black">Tổng giá gốc</span>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <strong class="text-black">@string.Format("{0:#,##0} VND", totalAmount + totalSale)</strong>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <span class="text-black">Tổng tiền giảm</span>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <strong class="text-black">@string.Format("{0:#,##0} VND", totalSale)</strong>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col-md-6">
+                                <span class="text-black">Tổng thanh toán</span>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <strong class="text-black">@string.Format("{0:#,##0} VND", totalAmount)</strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="/thanh-toan-dat-hang">
+                                    <button class="btn btn-primary btn-lg btn-block">
+                                        Tiến hành đặt hàng
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.js-btn-plus').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var input = button.parentNode.parentNode.querySelector('.quantity-input');
+                input.value = parseInt(input.value) + 1;
+            });
+        });
+
+        document.querySelectorAll('.js-btn-minus').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var input = button.parentNode.parentNode.querySelector('.quantity-input');
+                var value = parseInt(input.value) - 1;
+                if (value >= 0) {
+                    input.value = value;
+                }
+            });
+        });
+
+        function updateCart() {
+            document.getElementById('updateCartForm').submit();
+        }
+
+        $(document).ready(function () {
+            $('.btn-remove').click(function (event) {
+                event.preventDefault();
+
+                var productId = $(this).data('product-id');
+
+                $.ajax({
+                    url: '/Cart/RemoveCartItem',
+                    type: 'POST',
+                    data: { productId: productId },
+                    success: function () {
+                        location.reload();
+                    }
+                });
+            });
+        });
+
+    </script>
+}

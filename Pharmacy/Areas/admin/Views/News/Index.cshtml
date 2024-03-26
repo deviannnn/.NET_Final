@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Pharmacy.Models.News>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+}
+
+@section CSS {
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/Areas/admin/wwwroot/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    <style>
+        table th,
+        table td {
+            text-align: center;
+        }
+    </style>
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Tin tức</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/admin">Trang Chủ</a></li>
+                    <li class="breadcrumb-item active">Tin tức</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <!-- Card Header -->
+                <div class="card-header">
+                    <a href="@Url.Action("Create", "News")" class="text-light">
+                        <button type="button" class="btn btn-success col-2">Đăng tin tức</button>
+                    </a>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="input-group input-group-sm ml-auto" style="width: 185px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tiêu đề</th>
+                                <th>Ảnh đại diện</th>
+                                <th>Hiển thị</th>
+                                <th>Vị trí</th>
+                                <th>Ngày cập nhật</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ var STT = 1; }
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.Raw(STT++)
+                                    </td>
+                                    <td style="text-align: start">
+                                        @Html.DisplayFor(modelItem => item.tittle)
+                                    </td>
+                                    <td style="padding: 7px">
+                                        <img src="~/wwwroot/upload/img/news/@item.img" style="width:120px; height: 70px"/>
+                                    </td>
+                                    <td>
+                                        @(item.hide.GetValueOrDefault(false) ? "Đang hiển thị" : "Đã ẩn")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.order)
+                                    </td>
+                                    <td>
+                                        @(item.datebegin.HasValue ? item.datebegin.Value.ToString("dd/MM/yyyy") : "")
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "News", new { id = item.id })"><button type="button" class="btn btn-warning">Sửa</button></a>
+                                        <a href="@Url.Action("Details", "News", new { id = item.id })"><button type="button" class="btn btn-default">Chi tiết</button></a>
+                                        <a href="@Url.Action("Delete", "News", new { id = item.id })"><button type="button" class="btn btn-danger">Xóa</button></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.container-fluid -->
+<!-- /.content -->
+
+@section Scripts {
+    <!-- DataTables -->
+    <script src="~/Areas/admin/wwwroot/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/Areas/admin/wwwroot/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+    <!-- page script -->
+    <script>
+        $(function () {
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+            });
+        });
+    </script>
+}

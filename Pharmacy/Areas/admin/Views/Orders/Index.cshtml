@@ -1,0 +1,148 @@
+﻿@model IEnumerable<Pharmacy.Models.Order>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+}
+
+@section CSS {
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/Areas/admin/wwwroot/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    <style>
+        table th,
+        table td {
+            text-align: center;
+        }
+    </style>
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Đơn hàng</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/admin">Trang Chủ</a></li>
+                    <li class="breadcrumb-item active">Đơn hàng</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content-header -->
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Danh sách đơn hàng</h3>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="input-group input-group-sm ml-auto" style="width: 185px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mã đơn hàng</th>
+                                <th>Tài khoản</th>
+                                <th>Tổng đơn</th>
+                                <th>Ngày đặt </th>
+                                <th>Trạng thái đơn hàng</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        #@item.id
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Account.email)
+                                    </td>
+                                    <td>
+                                        @string.Format("{0:#,##0} VND", item.total_amount)
+                                    </td>
+                                    <td>
+                                        @(item.datecreate.HasValue ? item.datecreate.Value.ToString("dd/MM/yyyy") : "")
+                                    </td>
+                                    <td>
+                                        @if (item.status == 0)
+                                        {
+                                            <span class="text-warning">Chờ duyệt</span>
+
+                                        }
+                                        else if (item.status == 1)
+                                        {
+                                            <span class="text-cyan">Đang chờ vận chuyển</span>
+                                        }
+                                        else if (item.status == 2)
+                                        {
+                                            <span class="text-success">Giao hàng thành công</span>
+                                        }
+                                        else if (item.status == -1)
+                                        {
+                                            <span class="text-danger">Đơn hàng bị huỷ</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.status == 0)
+                                        {
+                                            <a href="@Url.Action("Confirm", "Orders", new { id = item.id })"><button type="button" class="btn btn-block btn-primary btn-xs">Duyệt đơn</button></a>
+                                            <a href="@Url.Action("Cancel", "Orders", new { id = item.id })"><button type="button" class="btn btn-block btn-danger btn-xs">Huỷ đơn</button></a>
+                                        }
+                                        else if (item.status == -1)
+                                        {
+                                            <a href="@Url.Action("Confirm", "Orders", new { id = item.id })"><button type="button" class="btn btn-block btn-primary btn-xs">Mở lại đơn</button></a>
+                                        }
+                                        else if (item.status == 1)
+                                        {
+                                            <a href="@Url.Action("Cancel", "Orders", new { id = item.id })"><button type="button" class="btn btn-block btn-danger btn-xs">Huỷ đơn</button></a>
+                                        }
+                                        
+                                        <a href="@Url.Action("Details", "Orders", new { id = item.id })"><button type="button" class="btn btn-block btn-default btn-xs">Chi tiết</button></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.container-fluid -->
+<!-- /.content -->
+
+@section Scripts {
+    <!-- DataTables -->
+    <script src="~/Areas/admin/wwwroot/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="~/Areas/admin/wwwroot/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+    <!-- page script -->
+    <script>
+        $(function () {
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+            });
+        });
+    </script>
+}
+

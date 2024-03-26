@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Pharmacy.Models.Category>
+
+@{
+    int count = 0;
+}
+
+@foreach (var category in Model)
+{
+    <div class="site-section" style="@((count % 2 == 1) ? "background-color: ghostwhite" : "") ">
+        <div class="container">
+            <div class="row">
+                <div class="title-section text-center col-12">
+                    <h2 class="text-uppercase"><a href="/@ViewBag.meta/@category.meta">@category.name</a></h2>
+                </div>
+            </div>
+
+            <div class="row">
+
+                @Html.Action("getProduct", "Home", new { id = @category.id, metatittle = @ViewBag.meta })
+
+            </div>
+
+        </div>
+    </div>
+    count++;
+}
+
